@@ -1,0 +1,22 @@
+{
+  "name": "OOPteamGen",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^24.8.0",
+    "inquirer": "^8.1.2"
+  },
+  "dependencies": {
+    "validator": "^13.6.0"
+  }
+}
