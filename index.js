@@ -1,10 +1,44 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const uuid = require("./helpers/uuid");
+//creates a team array to create cards from
 
-const managerArray = [];
-const engineerArray = [];
-const internArray = [];
+const teamArray = [];
+let spec;
+const Manager = require("./lib/manager");
+const intern = require("./lib/intern");
+const engineer = require("./lib/engineer");
+const employee = require("./lib/employee");
+//initial questions (employee) and desides what type of employee you are
+let innerHTML = "";
+
+// function renderMarkdown() {
+
+// }
+
+function generateMarkdown() {
+  teamArray.map((mapData) => {
+    mapData.getRole() === "Manager"
+      ? (spec = `Office Number: ${mapData.getOfficeNumber()}`)
+      : mapData.getRole() === "Engineer"
+      ? (spec = `GitHub: ${mapData.getGithub()}`)
+      : mapData.getRole() === "Intern"
+      ? (spec = `School: ${mapData.getSchool()}`)
+      : console.log("error");
+    console.log(mapData.getRole());
+    innerHTML += `<div class="card">
+        <div class="card-body">
+          <h5 class="card-title">${mapData.getName()}</h5>
+          <h5 class="card-title">${mapData.getRole()}</h5>
+          <p class="card-text">${mapData.getEmail()}</p>
+          <p class="card-text">
+            <small class="text-muted"> ${spec}</small>
+          </p>
+        </div>
+      </div>`;
+  });
+  fs.writeToFile("index.html", innerHTML);
+}
 
 initQuestions = () => {
   inquirer
@@ -27,6 +61,7 @@ initQuestions = () => {
     );
 };
 
+//addMananger and where to go next
 function addManager() {
   inquirer
     .prompt([
@@ -36,7 +71,7 @@ function addManager() {
         message: "what is your name?",
       },
       {
-        type: "input",
+        type: "number",
         name: "managerId",
         message: "we will create you an id",
       },
@@ -46,7 +81,7 @@ function addManager() {
         message: "what is yout email?",
       },
       {
-        type: "input",
+        type: "number",
         name: "managerOffice",
         message: "what is your office number?",
       },
@@ -63,14 +98,15 @@ function addManager() {
       },
     ])
     .then((response) => {
-      const newManager = new manager(
+      const newManager = new Manager(
         response.managerName,
         response.managerId,
         response.managerEmail,
         response.managerOffice
       );
-      managerArray.push(newManager);
-      console.log(managerArray);
+
+      teamArray.push(newManager);
+
       response.nextMember === "Manager"
         ? addManager()
         : response.nextMember === "Engineer"
@@ -82,7 +118,7 @@ function addManager() {
         : console.log("error");
     });
 }
-
+//addEngineer and where to go next
 function addEngineer() {
   inquirer
     .prompt([
@@ -92,9 +128,9 @@ function addEngineer() {
         message: "what is your name?",
       },
       {
-        type: "input",
+        type: "number",
         name: "engineerId",
-        message: "we will create you an id",
+        message: "what is your id",
       },
       {
         type: "input",
@@ -119,9 +155,13 @@ function addEngineer() {
       },
     ])
     .then((response) => {
-      const newEngineer = response;
-      engineerArray.push(newEngineer);
-
+      const newEngineer = new engineer(
+        response.engineerName,
+        response.engineerId,
+        response.engineerEmail,
+        response.engineerGit
+      );
+      teamArray.push(newEngineer);
       response.nextMember === "Manager"
         ? addManager()
         : response.nextMember === "Engineer"
@@ -133,7 +173,7 @@ function addEngineer() {
         : console.log("error");
     });
 }
-
+//addIntern and where to go next
 function addIntern() {
   inquirer
     .prompt([
@@ -143,7 +183,7 @@ function addIntern() {
         message: "what is your name?",
       },
       {
-        type: "input",
+        type: "number",
         name: "internId",
         message: "we will create you an id",
       },
@@ -170,8 +210,13 @@ function addIntern() {
       },
     ])
     .then((response) => {
-      const newIntern = response;
-      internArray.push(newIntern);
+      const newIntern = new intern(
+        response.internName,
+        response.internId,
+        response.internEmail,
+        response.internSchool
+      );
+      teamArray.push(newIntern);
 
       response.nextMember === "Manager"
         ? addManager()
@@ -184,6 +229,6 @@ function addIntern() {
         : console.log("error");
     });
 }
-
+//start the app
 initQuestions();
 // inquirer.prompt();
