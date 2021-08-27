@@ -12,9 +12,34 @@ const employee = require("./lib/employee");
 //initial questions (employee) and desides what type of employee you are
 let innerHTML = "";
 
-// function renderMarkdown() {
+function renderMarkdown() {
+  let fullHTML = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
+      crossorigin="anonymous"
+    />
 
-// }
+    <script type="script" src="./index.js"></script>
+    <title>teamGen</title>
+  </head>
+  <body>
+    <h1>The Team</h1>
+    <main class="card-group" id="theMainCard">${innerHTML}</main>
+  </body>
+</html>`;
+
+  console.log(fullHTML);
+  fs.writeFile("index.html", fullHTML, (err) =>
+    err ? console.log(err) : console.log("file was written!")
+  );
+}
 
 function generateMarkdown() {
   teamArray.map((mapData) => {
@@ -26,6 +51,7 @@ function generateMarkdown() {
       ? (spec = `School: ${mapData.getSchool()}`)
       : console.log("error");
     console.log(mapData.getRole());
+
     innerHTML += `<div class="card">
         <div class="card-body">
           <h5 class="card-title">${mapData.getName()}</h5>
@@ -37,7 +63,7 @@ function generateMarkdown() {
         </div>
       </div>`;
   });
-  fs.writeToFile("index.html", innerHTML);
+  renderMarkdown();
 }
 
 initQuestions = () => {
