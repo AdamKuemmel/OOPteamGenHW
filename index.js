@@ -27,15 +27,16 @@ function renderMarkdown() {
     />
 
     <script type="script" src="./index.js"></script>
+    <link rel="stylesheet" href="./src/style.css" />
+
     <title>teamGen</title>
   </head>
   <body>
-    <h1>The Team</h1>
-    <main class="card-group" id="theMainCard">${innerHTML}</main>
+    <h1 id="teamHead">The Team</h1>
+    <main class="card-group">${innerHTML}</main>
   </body>
 </html>`;
 
-  console.log(fullHTML);
   fs.writeFile("index.html", fullHTML, (err) =>
     err ? console.log(err) : console.log("file was written!")
   );
@@ -50,18 +51,22 @@ function generateMarkdown() {
       : mapData.getRole() === "Intern"
       ? (spec = `School: ${mapData.getSchool()}`)
       : console.log("error");
-    console.log(mapData.getRole());
 
-    innerHTML += `<div class="card">
-        <div class="card-body">
-          <h5 class="card-title">${mapData.getName()}</h5>
-          <h5 class="card-title">${mapData.getRole()}</h5>
-          <p class="card-text">${mapData.getEmail()}</p>
+    innerHTML += `<h2 class="card">
+        <div class="card-body" id="theMainCard">
+          <h5 class="card-title customTitle">${mapData.getName()}</h5>
+          <h5 class="card-title customRole">${mapData.getRole()}</h5>
+          <a
+            href="mailto:${mapData.getEmail()}"
+            subject="email"
+            class="customEmail"
+            >${mapData.getEmail()}</a
+          >
           <p class="card-text">
-            <small class="text-muted"> ${spec}</small>
+            <small class="card-text customSpec"> ${spec}</small>
           </p>
         </div>
-      </div>`;
+      </h2>`;
   });
   renderMarkdown();
 }
@@ -99,7 +104,7 @@ function addManager() {
       {
         type: "number",
         name: "managerId",
-        message: "we will create you an id",
+        message: "Please create a numeric ID:",
       },
       {
         type: "input",
@@ -156,12 +161,12 @@ function addEngineer() {
       {
         type: "number",
         name: "engineerId",
-        message: "what is your id",
+        message: "Please create a numeric id:",
       },
       {
         type: "input",
         name: "engineerEmail",
-        message: "what is yout email?",
+        message: "what is your email?",
       },
       {
         type: "input",
@@ -211,12 +216,12 @@ function addIntern() {
       {
         type: "number",
         name: "internId",
-        message: "we will create you an id",
+        message: "Please create a numeric id:",
       },
       {
         type: "input",
         name: "internEmail",
-        message: "what is yout email?",
+        message: "what is your email?",
       },
       {
         type: "input",
